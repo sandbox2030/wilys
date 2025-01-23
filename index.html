@@ -8,20 +8,28 @@
 
   <!-- الشريط العلوي -->
   <div class="top-bar">
-    <p id="top-bar-text"></p>
+    <p id="top-bar-text">Loading...</p> <!-- النص الافتراضي -->
   </div>
 
   <script>
     // جلب النص المخزن من Google Apps Script عند تحميل الصفحة
     window.onload = function() {
-      var url = "https://script.google.com/macros/s/AKfycbxdRhdDhUOH5k7kJKKF6PmJ__kfGDW77mwtaIR4WRChhvMKCQsCXWbRBdKvnyeCv0AFHg/exec"; // أدخل الرابط هنا
+      var url = "https://script.google.com/macros/s/AKfycbzMLjgub8zeL335aueNsJVlGum-xt-1te6XN75A6xY6KqzRkrLRjqtw1YtB8fQdmyqV8Q/exec"; // أدخل الرابط هنا
 
       fetch(url)
-        .then(response => response.text())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("حدث خطأ في جلب البيانات");
+          }
+          return response.text();
+        })
         .then(data => {
           document.getElementById("top-bar-text").innerText = data;
         })
-        .catch(error => console.log("حدث خطأ: " + error));
+        .catch(error => {
+          console.error("حدث خطأ: ", error);
+          document.getElementById("top-bar-text").innerText = "حدث خطأ في تحميل النص.";
+        });
     }
   </script>
 
